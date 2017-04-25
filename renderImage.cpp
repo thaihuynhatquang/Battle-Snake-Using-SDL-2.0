@@ -14,11 +14,12 @@ SDL_Texture* Body_Snake_A;  SDL_Texture* Body_Snake_B;
 SDL_Texture* Bomb_A; SDL_Texture* Bomb_B;
 SDL_Texture* Food;
 SDL_Texture* result_text;
-SDL_Texture* Background; SDL_Texture* StartScreen; SDL_Texture* PlayScreen;
+SDL_Texture* Background; SDL_Texture* StartScreen; SDL_Texture* PlayScreen; SDL_Texture* HowToPlayScreen;
 SDL_Texture* Win; SDL_Texture* Lose;
 SDL_Texture* pauseButton;
 SDL_Texture* playButton;
 SDL_Texture* startButton;
+SDL_Texture* howToPlayButton;
 SDL_Texture* restartButton;
 SDL_Texture* exitButton;
 
@@ -84,24 +85,18 @@ void loadScore()
     SDL_Color WHITE = {255,255,255};
     SDL_Surface* ScoreSurA = TTF_RenderText_Solid(comic, strA.c_str(), WHITE);
     SDL_Surface* ScoreSurB = TTF_RenderText_Solid(comic, strB.c_str(), WHITE);
-    SDL_Rect ScoreRectA = {75, 300, 200, 350};
-    SDL_Rect ScoreRectB = {1050, 300, 200, 350};
+    SDL_Rect ScoreRectA = {1050, 300, 200, 350};
+    SDL_Rect ScoreRectB = {75, 300, 200, 350};
     result_text = SDL_CreateTextureFromSurface(renderer, ScoreSurA);
     SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectA);
     result_text = SDL_CreateTextureFromSurface(renderer, ScoreSurB);
     SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectB);
 }
 
-void drawStartScreen()
-{
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, StartScreen, NULL, &Screen_rect);
-    SDL_RenderPresent(renderer);
-}
-
 void loadBackground()
 {
     PlayScreen = LoadTexture("Image/Background/PlayScreen.png");
+    HowToPlayScreen = LoadTexture("Image/Background/HowToPlayScreen.png");
     StartScreen = LoadTexture("Image/Background/StartScreen.png");
 }
 
@@ -116,13 +111,40 @@ void loadButton()
     pauseButton = LoadTexture("Image/Button/pause.png");
     playButton = LoadTexture("Image/Button/play.png");
     startButton = LoadTexture("Image/Rectangle.png");
+    howToPlayButton = LoadTexture("Image/Rectangle2.png");
     restartButton = LoadTexture("Image/Button/restart.png");
     exitButton = LoadTexture("Image/Button/exit.png");
+}
+
+void drawStartScreen()
+{
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, StartScreen, NULL, &Screen_rect);
+    SDL_RenderPresent(renderer);
+}
+
+void drawHowToPlayScreen()
+{
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, HowToPlayScreen, NULL, &Screen_rect);
+    SDL_RenderPresent(renderer);
 }
 
 void drawStartButton()
 {
     SDL_RenderCopy(renderer, startButton, NULL, &Rectangle);
+    SDL_RenderPresent(renderer);
+}
+
+void drawStartButtonInHowToPlay()
+{
+    SDL_RenderCopy(renderer, startButton, NULL, &Rectangle3);
+    SDL_RenderPresent(renderer);
+}
+
+void drawHowToPlayButton()
+{
+    SDL_RenderCopy(renderer, startButton, NULL, &Rectangle2);
     SDL_RenderPresent(renderer);
 }
 
@@ -221,13 +243,13 @@ void drawPlayScreen()
     {
         if(Result == -1)
         {
-            SDL_RenderCopy(renderer, Win, NULL, &ResultA);
-            SDL_RenderCopy(renderer, Lose, NULL, &ResultB);
+            SDL_RenderCopy(renderer, Lose, NULL, &ResultA);
+            SDL_RenderCopy(renderer, Win, NULL, &ResultB);
         }
         else
         {
-            SDL_RenderCopy(renderer, Win, NULL, &ResultB);
-            SDL_RenderCopy(renderer, Lose, NULL, &ResultA);
+            SDL_RenderCopy(renderer, Lose, NULL, &ResultB);
+            SDL_RenderCopy(renderer, Win, NULL, &ResultA);
         }
     }
     SDL_RenderPresent(renderer);
@@ -242,4 +264,31 @@ void loadImage()
     loadFood();
     loadResult();
     loadButton();
+}
+
+void quitImage()
+{
+    SDL_DestroyTexture(Head_Snake_A[4]);
+    SDL_DestroyTexture(Head_Snake_B[4]);
+    SDL_DestroyTexture(Tail_Snake_A[4]);
+    SDL_DestroyTexture(Tail_Snake_B[4]);
+    SDL_DestroyTexture(Body_Snake_A);
+    SDL_DestroyTexture(Body_Snake_B);
+    SDL_DestroyTexture(Bomb_A);
+    SDL_DestroyTexture(Bomb_B);
+    SDL_DestroyTexture(Food);
+    SDL_DestroyTexture(result_text);
+    SDL_DestroyTexture(Background);
+    SDL_DestroyTexture(StartScreen);
+    SDL_DestroyTexture(PlayScreen);
+    SDL_DestroyTexture(HowToPlayScreen);
+    SDL_DestroyTexture(Win);
+    SDL_DestroyTexture(Lose);
+    SDL_DestroyTexture(pauseButton);
+    SDL_DestroyTexture(playButton);
+    SDL_DestroyTexture(startButton);
+    SDL_DestroyTexture(howToPlayButton);
+    SDL_DestroyTexture(restartButton);
+    SDL_DestroyTexture(exitButton);
+    IMG_Quit();
 }

@@ -15,19 +15,21 @@ const int UP = 0, DOWN = 2, LEFT = 3, RIGHT = 1;
 int speed = 40, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
 int preDirectionA = RIGHT, directionA = LEFT, preDirectionB = LEFT, directionB = RIGHT;
 bool bombAStatus[10000], bombBStatus[10000];
-bool running = true, pause = false, gameOver = false, start = false, restart = false;
+bool running = true, pause = false, gameOver = false, start = false, restart = false, showHowToPlayScreen = false;
 SDL_Rect Arena = {352, 29, 630, 630};
 SDL_Rect pauseButtonRect = {510, 662, 35, 35};
 SDL_Rect restartButtonRect = {650, 662, 35, 35};
 SDL_Rect exitButtonRect = {790, 662, 35, 35};
-SDL_Rect Rectangle = {518, 520, 300, 110};
+SDL_Rect Rectangle = {522, 418, 300, 110};
+SDL_Rect Rectangle2 = {400, 545, 530, 110};
+SDL_Rect Rectangle3 = {525, 585, 310, 110};
 TTF_Font* comic;
 SDL_Window *windows;
 SDL_Renderer *renderer;
 
 void mouseEvent();
 void checkResult();
-void logic();
+void playGame();
 void Init();
 void loadImage();
 void waitEvent();
@@ -54,7 +56,7 @@ int main(int argc, char* argv[])
         if(start == true) drawButton();
         if(pause == false && gameOver == false && start == true)
         {
-            logic();
+            playGame();
         }
 	}
     return 0;
@@ -76,13 +78,25 @@ void waitEvent()
             {
                 int mouseX = event.motion.x;
                 int mouseY = event.motion.y;
-                if((mouseX >= Rectangle.x) && (mouseX <= Rectangle.x + Rectangle.w) && (mouseY >= Rectangle.y) && (mouseY <= Rectangle.y + Rectangle.h) && start == false)
+                if(start == false && showHowToPlayScreen == false)
                 {
-                    drawStartButton();
+                    if((mouseX >= Rectangle.x) && (mouseX <= Rectangle.x + Rectangle.w) && (mouseY >= Rectangle.y) && (mouseY <= Rectangle.y + Rectangle.h))
+                    {
+                        drawStartButton();
+                    }
+                    else if((mouseX >= Rectangle2.x) && (mouseX <= Rectangle2.x + Rectangle2.w) && (mouseY >= Rectangle2.y) && (mouseY <= Rectangle2.y + Rectangle2.h) && start == false && showHowToPlayScreen == false)
+                    {
+                        drawHowToPlayButton();
+                    }
+                    else drawStartScreen();
                 }
-                else if(start == false)
+                else if(start == false && showHowToPlayScreen == true)
                 {
-                    drawStartScreen();
+                    if((mouseX >= Rectangle3.x) && (mouseX <= Rectangle3.x + Rectangle3.w) && (mouseY >= Rectangle3.y) && (mouseY <= Rectangle3.y + Rectangle3.h) && start == false && showHowToPlayScreen == true)
+                    {
+                        drawStartButtonInHowToPlay();
+                    }
+                    else drawHowToPlayScreen();
                 }
                 break;
             }
@@ -90,32 +104,54 @@ void waitEvent()
             {
                 int mouseClickX = event.motion.x;
                 int mouseClickY = event.motion.y;
-                if((mouseClickX >= Rectangle.x) && (mouseClickX <= Rectangle.x + Rectangle.w) && (mouseClickY >= Rectangle.y) && (mouseClickY <= Rectangle.y + Rectangle.h) && start == false)
+                if(start == false && showHowToPlayScreen == false)
                 {
-                    playClickSound();
-                    drawStartButton();
-                    start = true;
+                    if((mouseClickX >= Rectangle.x) && (mouseClickX <= Rectangle.x + Rectangle.w) && (mouseClickY >= Rectangle.y) && (mouseClickY <= Rectangle.y + Rectangle.h))
+                    {
+                        playClickSound();
+                        drawStartButton();
+                        start = true;
+                    }
+                    else if((mouseClickX >= Rectangle2.x) && (mouseClickX <= Rectangle2.x + Rectangle2.w) && (mouseClickY >= Rectangle2.y) && (mouseClickY <= Rectangle2.y + Rectangle2.h))
+                    {
+                        playClickSound();
+                        drawHowToPlayScreen();
+                        showHowToPlayScreen = true;
+                    }
                 }
-                else if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == false && gameOver == false)
+                else if(start == false && showHowToPlayScreen == true)
                 {
-                    playClickSound();
-                    pause = true;
+                    if((mouseClickX >= Rectangle3.x) && (mouseClickX <= Rectangle3.x + Rectangle3.w) && (mouseClickY >= Rectangle3.y) && (mouseClickY <= Rectangle3.y + Rectangle3.h) && start == false && showHowToPlayScreen == true)
+                    {
+                        playClickSound();
+                        drawStartButtonInHowToPlay();
+                        start = true;
+                        showHowToPlayScreen = false;
+                    }
                 }
-                else if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == true && gameOver == false)
+                else if(start == true && showHowToPlayScreen == false)
                 {
-                    playClickSound();
-                    pause = false;
-                }
-                else if(mouseClickX >= restartButtonRect.x && mouseClickX <= restartButtonRect.x + restartButtonRect.w && mouseClickY >= restartButtonRect.y && mouseClickY <= restartButtonRect.y + restartButtonRect.h && start == true)
-                {
-                    playClickSound();
-                    restart = true;
-                }
-                else if(mouseClickX >= exitButtonRect.x && mouseClickX <= exitButtonRect.x + exitButtonRect.w && mouseClickY >= exitButtonRect.y && mouseClickY <= exitButtonRect.y + exitButtonRect.h && start == true)
-                {
-                    playClickSound();
-                    Quit();
-                    exit(0);
+                    if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == false && gameOver == false)
+                    {
+                        playClickSound();
+                        pause = true;
+                    }
+                    else if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == true && gameOver == false)
+                    {
+                        playClickSound();
+                        pause = false;
+                    }
+                    else if(mouseClickX >= restartButtonRect.x && mouseClickX <= restartButtonRect.x + restartButtonRect.w && mouseClickY >= restartButtonRect.y && mouseClickY <= restartButtonRect.y + restartButtonRect.h && start == true)
+                    {
+                        playClickSound();
+                        restart = true;
+                    }
+                    else if(mouseClickX >= exitButtonRect.x && mouseClickX <= exitButtonRect.x + exitButtonRect.w && mouseClickY >= exitButtonRect.y && mouseClickY <= exitButtonRect.y + exitButtonRect.h && start == true)
+                    {
+                        playClickSound();
+                        Quit();
+                        exit(0);
+                    }
                 }
                 break;
             }
@@ -130,15 +166,12 @@ void waitEvent()
                     }
                 case SDLK_p:
                     {
-                        pause = true;
+                        if(pause == true)
+                            pause = false;
+                        else pause = true;
                         break;
                     }
                 case SDLK_r:
-                    {
-                        pause = false;
-                        break;
-                    }
-                case SDLK_m:
                     {
                         restart = true;
                         break;
@@ -187,7 +220,7 @@ void checkResult()
     gameOver = false;
 }
 
-void logic()
+void playGame()
 {
     moveA();
     moveB();
@@ -197,22 +230,6 @@ void logic()
     eatBomb();
     checkResult();
     drawPlayScreen();
-}
-
-void Init()
-{
-    SDL_Init(SDL_INIT_EVERYTHING);
-	SDL_VideoInit(NULL);
-	TTF_Init();
-	IMG_Init(IMG_INIT_PNG);
-	windows = SDL_CreateWindow("Battle Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1300, 700, SDL_WINDOW_SHOWN);
-	renderer = SDL_CreateRenderer(windows, -1, SDL_RENDERER_ACCELERATED);
-
-	comic = TTF_OpenFont("Font/comic.ttf", 75);
-	if (comic == NULL)
-	{
-		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERRR", SDL_GetError(), windows);
-	}
 }
 
 void CreateGame()
@@ -252,6 +269,7 @@ void reCreateGame()
     start = false;
     pause = false;
     gameOver = false;
+    showHowToPlayScreen == false;
     for(int i =0; i < bombA_num; i++)
     {
         bombAStatus[i] = false;
@@ -263,16 +281,31 @@ void reCreateGame()
     preDirectionA = RIGHT, directionA = LEFT, preDirectionB = LEFT, directionB = RIGHT;
 }
 
+void Init()
+{
+    SDL_Init(SDL_INIT_EVERYTHING);
+	SDL_VideoInit(NULL);
+	TTF_Init();
+	IMG_Init(IMG_INIT_PNG);
+	windows = SDL_CreateWindow("Battle Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1300, 700, SDL_WINDOW_SHOWN);
+	renderer = SDL_CreateRenderer(windows, -1, SDL_RENDERER_ACCELERATED);
+
+	comic = TTF_OpenFont("Font/comic.ttf", 75);
+	if (comic == NULL)
+	{
+		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERRR", SDL_GetError(), windows);
+	}
+}
+
 void Quit()
 {
-    TTF_CloseFont(comic);
+    quitImage();
+    quitSound();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(windows);
 	renderer = NULL;
 	windows = NULL;
-	Mix_CloseAudio();
-	Mix_Quit();
 	SDL_Quit();
-	IMG_Quit();
+    TTF_CloseFont(comic);
 	TTF_Quit();
 }

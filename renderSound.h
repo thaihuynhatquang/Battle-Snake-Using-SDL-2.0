@@ -6,4 +6,5 @@ void playEatingSound();
 void playClickSound();
 void playDropBombSound();
 void playGameoverSound();
+void quitSound();
 #endif // RENDERSOUND_H

@@ -49,3 +49,13 @@ void playGameoverSound()
 {
     Mix_PlayChannel(-1, gameoverSound, 0);
 }
+
+void quitSound()
+{
+    Mix_FreeMusic(startSound);
+    Mix_FreeChunk(eatSound);
+    Mix_FreeChunk(clickSound);
+    Mix_FreeChunk(dropBombSound);
+    Mix_FreeChunk(gameoverSound);
+    Mix_CloseAudio();
+}
