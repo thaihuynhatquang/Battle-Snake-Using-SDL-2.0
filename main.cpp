@@ -269,7 +269,7 @@ void reCreateGame()
     start = false;
     pause = false;
     gameOver = false;
-    showHowToPlayScreen == false;
+    showHowToPlayScreen = false;
     for(int i =0; i < bombA_num; i++)
     {
         bombAStatus[i] = false;
@@ -283,7 +283,7 @@ void reCreateGame()
 
 void Init()
 {
-    SDL_Init(SDL_INIT_EVERYTHING);
+    SDL_Init(SDL_INIT_VIDEO || SDL_INIT_AUDIO);
 	SDL_VideoInit(NULL);
 	TTF_Init();
 	IMG_Init(IMG_INIT_PNG);
