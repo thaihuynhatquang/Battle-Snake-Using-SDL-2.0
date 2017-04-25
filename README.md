@@ -3,7 +3,7 @@
 
 You need using Code::Block to built and run this project.
 
-Unzip file.rar:
+Unzip file.zip:
   1. Copy and Paste folder MinGW to C:\Program Files (x86)\CodeBlocks\MinGW or C:\Program Files\CodeBlocks\
   2. Copy all file .dll to C:\Windows\System32 or C:\Windows\SysWOW64
 
