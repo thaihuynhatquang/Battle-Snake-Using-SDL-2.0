@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <stdlib.h>
 #include "snake.h"
+#include "renderSound.h"
 
 void snakeMove(int dir, positition Snake[], int realSnakeLength)
 {
@@ -15,7 +16,7 @@ void snakeMove(int dir, positition Snake[], int realSnakeLength)
 		Snake[i].x = Snake[i - 1].x0;
 		Snake[i].y = Snake[i - 1].y0;
 	}
-    //If Snake through over the wall
+    //SNAKE THROUGH OVER WALL
     if (Snake[0].x + Snake[0].width > Arena.x + Arena.w ) Snake[0].x = Arena.x;
     else if (Snake[0].x < Arena.x) Snake[0].x = Arena.x + Arena.w - Snake[0].width;
     if (Snake[0].y  + Snake[0].height > Arena.y + Arena.h ) Snake[0].y = Arena.y;
@@ -138,18 +139,21 @@ void eatBomb()
     {
         if(SnakeA[0].x == bombRectB[i].x && SnakeA[0].y == bombRectB[i].y && bombBStatus[i] == true)
         {
+            playEatingSound();
             decreaseSnakeA(1);
-            if(scoreA >= 5) scoreA -= 5;
+            if(scoreA >= 3) scoreA -= 3;
             else scoreA = 0;
             bombBStatus[i] = false;
         }
     }
+
     for(int i = 0; i < bombA_num; i++)
     {
         if(SnakeB[0].x == bombRectA[i].x && SnakeB[0].y == bombRectA[i].y && bombAStatus[i] == true)
         {
+            playEatingSound();
             decreaseSnakeB(1);
-            if(scoreB >= 5) scoreB -= 5;
+            if(scoreB >= 3) scoreB -= 3;
             else scoreB = 0;
             bombAStatus[i] = false;
         }
@@ -172,12 +176,14 @@ void eatFoodA()
 {
     if(SnakeA[0].x == foodA.x && SnakeA[0].y == foodA.y)
     {
+        playEatingSound();
         if(displaySnakeLengthA <= 9) increaseSnakeA(1);
         scoreA ++;
         makeFoodA();
     }
     else if(SnakeB[0].x == foodA.x && SnakeB[0].y == foodA.y)
     {
+        playEatingSound();
         if(displaySnakeLengthB <= 9) increaseSnakeB(1);
         scoreB ++;
         makeFoodA();
@@ -188,12 +194,14 @@ void eatFoodB()
 {
     if(SnakeA[0].x == foodB.x && SnakeA[0].y == foodB.y)
     {
+        playEatingSound();
         if(displaySnakeLengthA <= 9) increaseSnakeA(1);
         scoreA ++;
         makeFoodB();
     }
     else if(SnakeB[0].x == foodB.x && SnakeB[0].y == foodB.y)
     {
+        playEatingSound();
         if(displaySnakeLengthB <= 9) increaseSnakeB(1);
         scoreB++;
         makeFoodB();
@@ -227,6 +235,7 @@ void throughBomb()
     {
         if(displaySnakeLengthA != 2)
         {
+            playDropBombSound();
             decreaseSnakeA(1);
             dropBombA();
         }
@@ -236,6 +245,7 @@ void throughBomb()
     {
         if(displaySnakeLengthB != 2)
         {
+            playDropBombSound();
             decreaseSnakeB(1);
             dropBombB();
         }

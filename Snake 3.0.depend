@@ -1,18 +1,20 @@
 # depslib dependency file v1.0
-1492982694 source:d:\ltnc\snake 3.0\snake 3.0\main.cpp
+1493112329 source:d:\ltnc\snake 3.0\snake 3.0\main.cpp
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
+	<SDL2/SDL_mixer.h>
 	<SDL2/SDL.h>
 	<sstream>
 	<iostream>
 	<stdlib.h>
 	<ctime>
 	"snake.h"
-	"render.h"
+	"renderSound.h"
+	"renderImage.h"
 
-1492942301 d:\ltnc\snake 3.0\snake 3.0\snake.h
+1493061947 d:\ltnc\snake 3.0\snake 3.0\snake.h
 
-1492982758 source:d:\ltnc\snake 3.0\snake 3.0\render.cpp
+1493061746 source:d:\ltnc\snake 3.0\snake 3.0\render.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
@@ -21,11 +23,31 @@
 	"snake.h"
 	"render.h"
 
-1492983219 source:d:\ltnc\snake 3.0\snake 3.0\snake.cpp
+1493110626 source:d:\ltnc\snake 3.0\snake 3.0\snake.cpp
 	<iostream>
 	<SDL2/SDL.h>
 	<stdlib.h>
 	"snake.h"
+	"renderSound.h"
 
-1492982320 d:\ltnc\snake 3.0\snake 3.0\render.h
+1493061765 d:\ltnc\snake 3.0\snake 3.0\render.h
+
+1493112329 d:\ltnc\snake 3.0\snake 3.0\rendersound.h
+
+1493112329 d:\ltnc\snake 3.0\snake 3.0\renderimage.h
+
+1493112329 source:d:\ltnc\snake 3.0\snake 3.0\renderimage.cpp
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<iostream>
+	<sstream>
+	"snake.h"
+	"renderImage.h"
+
+1493112329 source:d:\ltnc\snake 3.0\snake 3.0\rendersound.cpp
+	<iostream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_mixer.h>
+	"renderSound.h"
 

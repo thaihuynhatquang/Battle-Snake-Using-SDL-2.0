@@ -1,20 +1,25 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL.h>
 #include <sstream>
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
 #include "snake.h"
-#include "render.h"
+#include "renderSound.h"
+#include "renderImage.h"
+
 
 const int UP = 0, DOWN = 2, LEFT = 3, RIGHT = 1;
-int speed = 35, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
+int speed = 40, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
 int preDirectionA = RIGHT, directionA = LEFT, preDirectionB = LEFT, directionB = RIGHT;
 bool bombAStatus[10000], bombBStatus[10000];
 bool running = true, pause = false, gameOver = false, start = false, restart = false;
 SDL_Rect Arena = {352, 29, 630, 630};
-SDL_Rect ButtonRect = {649.5, 662, 35, 35};
+SDL_Rect pauseButtonRect = {510, 662, 35, 35};
+SDL_Rect restartButtonRect = {650, 662, 35, 35};
+SDL_Rect exitButtonRect = {790, 662, 35, 35};
 SDL_Rect Rectangle = {518, 520, 300, 110};
 TTF_Font* comic;
 SDL_Window *windows;
@@ -24,6 +29,7 @@ void mouseEvent();
 void checkResult();
 void logic();
 void Init();
+void loadImage();
 void waitEvent();
 void CreateGame();
 void reCreateGame();
@@ -32,20 +38,23 @@ void Quit();
 int main(int argc, char* argv[])
 {
 	Init();
+	loadImage();
+	loadSound();
 	srand(time(NULL));
     CreateGame();
 	while (running == true)
 	{
+        playStartSound();
 		waitEvent();
+		if(restart == true)
+        {
+            reCreateGame();
+            restart = false;
+        }
         if(start == true) drawButton();
         if(pause == false && gameOver == false && start == true)
         {
             logic();
-        }
-        if(restart == true)
-        {
-            reCreateGame();
-            restart = false;
         }
 	}
     return 0;
@@ -61,50 +70,54 @@ void waitEvent()
         case SDL_QUIT:
             {
                 Quit();
-                break;
+                exit(0);
             }
         case SDL_MOUSEMOTION:
             {
                 int mouseX = event.motion.x;
                 int mouseY = event.motion.y;
-                //std::cout << mouseX << "\t" << mouseY << std::endl;
                 if((mouseX >= Rectangle.x) && (mouseX <= Rectangle.x + Rectangle.w) && (mouseY >= Rectangle.y) && (mouseY <= Rectangle.y + Rectangle.h) && start == false)
                 {
                     drawStartButton();
                 }
-
+                else if(start == false)
+                {
+                    drawStartScreen();
+                }
                 break;
             }
         case SDL_MOUSEBUTTONDOWN:
             {
-                switch(event.button.button)
+                int mouseClickX = event.motion.x;
+                int mouseClickY = event.motion.y;
+                if((mouseClickX >= Rectangle.x) && (mouseClickX <= Rectangle.x + Rectangle.w) && (mouseClickY >= Rectangle.y) && (mouseClickY <= Rectangle.y + Rectangle.h) && start == false)
                 {
-                case SDL_BUTTON_LEFT:
-                    {
-                        int mouseClickX = event.motion.x;
-                        int mouseClickY = event.motion.y;
-                        if((mouseClickX >= Rectangle.x) && (mouseClickX <= Rectangle.x + Rectangle.w) && (mouseClickY >= Rectangle.y) && (mouseClickY <= Rectangle.y + Rectangle.h) && start == false)
-                        {
-                            drawStartButton();
-                            start = true;
-                        }
-                        else if(mouseClickX >= ButtonRect.x && mouseClickX <= ButtonRect.x + ButtonRect.w && mouseClickY >= ButtonRect.y && mouseClickY <= ButtonRect.y + ButtonRect.h && pause == false && gameOver == false)
-                        {
-                            pause = true;
-                        }
-                        else if(mouseClickX >= ButtonRect.x && mouseClickX <= ButtonRect.x + ButtonRect.w && mouseClickY >= ButtonRect.y && mouseClickY <= ButtonRect.y + ButtonRect.h && pause == true && gameOver == false)
-                        {
-                            pause = false;
-                        }
-                        else if(mouseClickX >= ButtonRect.x && mouseClickX <= ButtonRect.x + ButtonRect.w && mouseClickY >= ButtonRect.y && mouseClickY <= ButtonRect.y + ButtonRect.h && gameOver == true)
-                        {
-                            restart = true;
-                        }
-                        break;
-                    }
-                default:
-                    break;
+                    playClickSound();
+                    drawStartButton();
+                    start = true;
                 }
+                else if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == false && gameOver == false)
+                {
+                    playClickSound();
+                    pause = true;
+                }
+                else if(mouseClickX >= pauseButtonRect.x && mouseClickX <= pauseButtonRect.x + pauseButtonRect.w && mouseClickY >= pauseButtonRect.y && mouseClickY <= pauseButtonRect.y + pauseButtonRect.h && pause == true && gameOver == false)
+                {
+                    playClickSound();
+                    pause = false;
+                }
+                else if(mouseClickX >= restartButtonRect.x && mouseClickX <= restartButtonRect.x + restartButtonRect.w && mouseClickY >= restartButtonRect.y && mouseClickY <= restartButtonRect.y + restartButtonRect.h && start == true)
+                {
+                    playClickSound();
+                    restart = true;
+                }
+                else if(mouseClickX >= exitButtonRect.x && mouseClickX <= exitButtonRect.x + exitButtonRect.w && mouseClickY >= exitButtonRect.y && mouseClickY <= exitButtonRect.y + exitButtonRect.h && start == true)
+                {
+                    playClickSound();
+                    Quit();
+                    exit(0);
+                }
+                break;
             }
 		case SDL_KEYDOWN:
             {
@@ -113,7 +126,7 @@ void waitEvent()
                 case SDLK_ESCAPE:
                     {
                         Quit();
-                        break;
+                        exit(0);
                     }
                 case SDLK_p:
                     {
@@ -147,24 +160,28 @@ void checkResult()
     {
         Result = -1;
         gameOver = true;
+        playGameoverSound();
         return;
     }
     if(scoreB == 50)
     {
         Result = 1;
         gameOver = true;
+        playGameoverSound();
         return;
     }
     if(displaySnakeLengthA < 2)
     {
         Result = 1;
         gameOver = true;
+        playGameoverSound();
         return;
     }
     if(displaySnakeLengthB < 2)
     {
         Result  = -1;
         gameOver = true;
+        playGameoverSound();
         return;
     }
     gameOver = false;
@@ -200,13 +217,7 @@ void Init()
 
 void CreateGame()
 {
-    loadBackground();
-	loadSnake();
-    loadBomb();
-    loadFood();
     drawStartScreen();
-    loadResult();
-    loadButton();
     SnakeA[0].x = Arena.x; SnakeA[0].y = Arena.y;
     for(int i = 1; i < displaySnakeLengthA; i++)
     {
@@ -259,6 +270,8 @@ void Quit()
 	SDL_DestroyWindow(windows);
 	renderer = NULL;
 	windows = NULL;
+	Mix_CloseAudio();
+	Mix_Quit();
 	SDL_Quit();
 	IMG_Quit();
 	TTF_Quit();
