@@ -30,34 +30,34 @@ void moveA()
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_UP])
     {
-        if(preDirectionA != DOWN && preDirectionA != UP)
+        if(directionA != DOWN)
         {
+            if(directionA != UP) preDirectionA = directionA;
             directionA = UP;
-            preDirectionA = UP;
         }
     }
     else if (state[SDL_SCANCODE_DOWN])
     {
-        if(preDirectionA != DOWN && preDirectionA != UP)
+        if(directionA != UP)
         {
+            if(directionA != DOWN) preDirectionA = directionA;
             directionA = DOWN;
-            preDirectionA = DOWN;
         }
     }
     else if (state[SDL_SCANCODE_RIGHT])
     {
-        if(preDirectionA != RIGHT && preDirectionA != LEFT)
+        if(directionA != LEFT)
         {
+            if(directionA != RIGHT) preDirectionA = directionA;
             directionA = RIGHT;
-            preDirectionA = RIGHT;
         }
     }
     else if (state[SDL_SCANCODE_LEFT])
     {
-        if(preDirectionA != RIGHT && preDirectionA != LEFT)
+        if(directionA != RIGHT)
         {
+            if(directionA != LEFT) preDirectionA = directionA;
             directionA = LEFT;
-            preDirectionA = LEFT;
         }
     }
     snakeMove(directionA, SnakeA, realSnakeLengthA);
@@ -68,34 +68,34 @@ void moveB()
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_W])
     {
-        if(preDirectionB != DOWN && preDirectionB != UP)
+        if(directionB != DOWN)
         {
+            if(directionB != UP) preDirectionB = directionB;
             directionB = UP;
-            preDirectionB = UP;
         }
     }
     else if (state[SDL_SCANCODE_S])
     {
-        if(preDirectionB != UP && preDirectionB != DOWN)
+        if(directionB != UP)
         {
+            if(directionB != DOWN) preDirectionB = directionB;
             directionB = DOWN;
-            preDirectionB = DOWN;
         }
     }
     else if (state[SDL_SCANCODE_D])
     {
-        if(preDirectionB != RIGHT && preDirectionB != LEFT)
+        if(directionB != LEFT)
         {
+            if(directionB != RIGHT) preDirectionB = directionB;
             directionB = RIGHT;
-            preDirectionB = RIGHT;
         }
     }
     else if (state[SDL_SCANCODE_A])
     {
-        if(preDirectionB != RIGHT && preDirectionB != LEFT)
+        if(directionB != RIGHT)
         {
+            if(directionB != LEFT) preDirectionB = directionB;
             directionB = LEFT;
-            preDirectionB = LEFT;
         }
     }
     snakeMove(directionB, SnakeB, realSnakeLengthB);

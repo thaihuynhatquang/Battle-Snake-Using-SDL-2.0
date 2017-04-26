@@ -12,7 +12,7 @@
 
 
 const int UP = 0, DOWN = 2, LEFT = 3, RIGHT = 1;
-int speed = 40, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
+int speed = 45, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
 int preDirectionA = RIGHT, directionA = LEFT, preDirectionB = LEFT, directionB = RIGHT;
 bool bombAStatus[10000], bombBStatus[10000];
 bool running = true, pause = false, gameOver = false, start = false, restart = false, showHowToPlayScreen = false;

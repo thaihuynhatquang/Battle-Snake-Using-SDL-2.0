@@ -7,10 +7,9 @@
 #include "renderImage.h"
 
 positition SnakeA[10000], SnakeB[10000], foodA, foodB, Direct[4];
-
 SDL_Texture* Head_Snake_A[4]; SDL_Texture* Head_Snake_B[4];
 SDL_Texture* Tail_Snake_A[4]; SDL_Texture* Tail_Snake_B[4];
-SDL_Texture* Body_Snake_A;  SDL_Texture* Body_Snake_B;
+SDL_Texture* Body_Snake_A[5]; SDL_Texture* Body_Snake_B[5];
 SDL_Texture* Bomb_A; SDL_Texture* Bomb_B;
 SDL_Texture* Food;
 SDL_Texture* result_text;
@@ -30,7 +29,7 @@ SDL_Rect Screen_rect = {0,0,1300,700};
 SDL_Rect ResultA = {25, 580, 300, 120};
 SDL_Rect ResultB = {990, 580, 300, 120};
 
-int scoreA = 0, scoreB = 0, displaySnakeLengthA = 2, displaySnakeLengthB = 2, realSnakeLengthB = 2, realSnakeLengthA = 2;
+int scoreA = 0, scoreB = 0, displaySnakeLengthA = 2, displaySnakeLengthB = 2, realSnakeLengthB = 3, realSnakeLengthA = 3;
 
 SDL_Texture* LoadTexture(const std::string &str)
 {
@@ -51,8 +50,16 @@ void loadSnake()
     Head_Snake_B[2] = LoadTexture("Image/Snake/Head/LeftB.png");
     Head_Snake_B[3] = LoadTexture("Image/Snake/Head/RightB.png");
 
-    Body_Snake_A = LoadTexture("Image/Snake/Body/BodyA.png");
-    Body_Snake_B = LoadTexture("Image/Snake/Body/BodyB.png");
+    Body_Snake_A[0] = LoadTexture("Image/Snake/Body/MiddleA.png");
+    Body_Snake_A[1] = LoadTexture("Image/Snake/Body/TopLeftA.png");
+    Body_Snake_A[2] = LoadTexture("Image/Snake/Body/TopRightA.png");
+    Body_Snake_A[3] = LoadTexture("Image/Snake/Body/BottomLeftA.png");
+    Body_Snake_A[4] = LoadTexture("Image/Snake/Body/BottomRightA.png");
+    Body_Snake_B[0] = LoadTexture("Image/Snake/Body/MiddleB.png");
+    Body_Snake_B[1] = LoadTexture("Image/Snake/Body/TopLeftB.png");
+    Body_Snake_B[2] = LoadTexture("Image/Snake/Body/TopRightB.png");
+    Body_Snake_B[3] = LoadTexture("Image/Snake/Body/BottomLeftB.png");
+    Body_Snake_B[4] = LoadTexture("Image/Snake/Body/BottomRightB.png");
 
     Tail_Snake_A[0] = LoadTexture("Image/Snake/Tail/UpA.png");
     Tail_Snake_A[1] = LoadTexture("Image/Snake/Tail/DownA.png");
@@ -91,6 +98,8 @@ void loadScore()
     SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectA);
     result_text = SDL_CreateTextureFromSurface(renderer, ScoreSurB);
     SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectB);
+    SDL_FreeSurface(ScoreSurA);
+    SDL_FreeSurface(ScoreSurB);
 }
 
 void loadBackground()
@@ -158,13 +167,81 @@ void drawButton()
     SDL_RenderPresent(renderer);
 }
 
-void drawPlayScreen()
+void drawHeadSnake(int direction, SDL_Texture* Head_Snake[], SDL_Rect snakeRect[])
 {
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, PlayScreen, NULL, &Screen_rect);
-    loadScore();
+    if(direction == UP) SDL_RenderCopy(renderer, Head_Snake[0], NULL, &snakeRect[0]);
+    if(direction == DOWN) SDL_RenderCopy(renderer, Head_Snake[1], NULL, &snakeRect[0]);
+    if(direction == LEFT) SDL_RenderCopy(renderer, Head_Snake[2], NULL, &snakeRect[0]);
+    if(direction == RIGHT) SDL_RenderCopy(renderer, Head_Snake[3], NULL, &snakeRect[0]);
+}
 
-    //DRAW SNAKE
+void drawBodySnake(int i, positition Snake[], SDL_Texture* Body_Snake[], SDL_Rect snakeRect[])
+{
+    if((Snake[i - 1].x < Snake[i + 1].x) && (Snake[i - 1].y < Snake[i + 1].y) && (Snake[i + 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[2], NULL, &snakeRect[i]);
+    }
+    else if((Snake[i - 1].x < Snake[i + 1].x) && (Snake[i - 1].y < Snake[i + 1].y) && (Snake[i - 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[4], NULL, &snakeRect[i]);
+    }
+
+    else if((Snake[i - 1].x > Snake[i + 1].x) && (Snake[i - 1].y < Snake[i + 1].y) && (Snake[i + 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[1], NULL, &snakeRect[i]);
+    }
+    else if((Snake[i - 1].x > Snake[i + 1].x) && (Snake[i - 1].y < Snake[i + 1].y) && (Snake[i - 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[3], NULL, &snakeRect[i]);
+    }
+
+    else if((Snake[i - 1].x > Snake[i + 1].x) && (Snake[i - 1].y > Snake[i + 1].y) && (Snake[i + 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[4], NULL, &snakeRect[i]);
+    }
+    else if((Snake[i - 1].x > Snake[i + 1].x) && (Snake[i - 1].y > Snake[i + 1].y) && (Snake[i - 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[2], NULL, &snakeRect[i]);
+    }
+
+    else if((Snake[i - 1].x < Snake[i + 1].x) && (Snake[i - 1].y > Snake[i + 1].y) && (Snake[i + 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[3], NULL, &snakeRect[i]);
+    }
+    else if((Snake[i - 1].x < Snake[i + 1].x) && (Snake[i - 1].y > Snake[i + 1].y) && (Snake[i - 1].x0 == Snake[i].x))
+    {
+        SDL_RenderCopy(renderer, Body_Snake[1], NULL, &snakeRect[i]);
+    }
+
+    else SDL_RenderCopy(renderer, Body_Snake[0], NULL, &snakeRect[i]);
+}
+
+void drawTailSnake(positition Snake[], int displaySnakeLength, SDL_Texture* Tail_Snake[], SDL_Rect snakeRect[])
+{
+    if((Snake[displaySnakeLength - 1].x == Snake[displaySnakeLength - 2].x) &&
+       (Snake[displaySnakeLength - 1].y > Snake[displaySnakeLength - 2].y))
+    {
+            SDL_RenderCopy(renderer, Tail_Snake[0], NULL, &snakeRect[displaySnakeLength - 1]);
+    }
+    else if((Snake[displaySnakeLength - 1].x == Snake[displaySnakeLength - 2].x) &&
+            (Snake[displaySnakeLength - 1].y < Snake[displaySnakeLength - 2].y))
+    {
+            SDL_RenderCopy(renderer, Tail_Snake[1], NULL, &snakeRect[displaySnakeLength - 1]);
+    }
+    else if((Snake[displaySnakeLength - 1].x > Snake[displaySnakeLength - 2].x) &&
+            (Snake[displaySnakeLength - 1].y == Snake[displaySnakeLength - 2].y))
+    {
+            SDL_RenderCopy(renderer, Tail_Snake[2], NULL, &snakeRect[displaySnakeLength - 1]);
+    }
+    else if((Snake[displaySnakeLength - 1].x < Snake[displaySnakeLength - 2].x) &&
+            (Snake[displaySnakeLength - 1].y == Snake[displaySnakeLength - 2].y))
+    {
+            SDL_RenderCopy(renderer, Tail_Snake[3], NULL, &snakeRect[displaySnakeLength - 1]);
+    }
+}
+
+void drawSnake()
+{
     for (int i = displaySnakeLengthA - 1; i >= 0; i--)
     {
         snakeRectA[i].x = SnakeA[i].x;
@@ -173,23 +250,18 @@ void drawPlayScreen()
         snakeRectA[i].h = SnakeA[i].height;
         if (i != 0 && i != displaySnakeLengthA - 1)
         {
-            SDL_RenderCopy(renderer, Body_Snake_A, NULL, &snakeRectA[i]);
+            drawBodySnake(i, SnakeA, Body_Snake_A, snakeRectA);
         }
         else if(i == 0)
         {
-            if(directionA == UP) SDL_RenderCopy(renderer, Head_Snake_A[0], NULL, &snakeRectA[i]);
-            if(directionA == DOWN) SDL_RenderCopy(renderer, Head_Snake_A[1], NULL, &snakeRectA[i]);
-            if(directionA == LEFT) SDL_RenderCopy(renderer, Head_Snake_A[2], NULL, &snakeRectA[i]);
-            if(directionA == RIGHT) SDL_RenderCopy(renderer, Head_Snake_A[3], NULL, &snakeRectA[i]);
+           drawHeadSnake(directionA,Head_Snake_A, snakeRectA);
         }
         else
         {
-            if(directionA == UP) SDL_RenderCopy(renderer, Tail_Snake_A[0], NULL, &snakeRectA[i]);
-            if(directionA == DOWN) SDL_RenderCopy(renderer, Tail_Snake_A[1], NULL, &snakeRectA[i]);
-            if(directionA == LEFT) SDL_RenderCopy(renderer, Tail_Snake_A[2], NULL, &snakeRectA[i]);
-            if(directionA == RIGHT) SDL_RenderCopy(renderer, Tail_Snake_A[3], NULL, &snakeRectA[i]);
+            drawTailSnake(SnakeA, displaySnakeLengthA, Tail_Snake_A, snakeRectA);
         }
     }
+
     for (int i = displaySnakeLengthB - 1; i >= 0; i--)
     {
         snakeRectB[i].x = SnakeB[i].x;
@@ -198,31 +270,30 @@ void drawPlayScreen()
         snakeRectB[i].h = SnakeB[i].height;
         if (i != 0 && i != displaySnakeLengthB - 1)
         {
-            SDL_RenderCopy(renderer, Body_Snake_B, NULL, &snakeRectB[i]);
+           drawBodySnake(i, SnakeB, Body_Snake_B, snakeRectB);
         }
         else if(i == 0)
         {
-            if(directionB == UP) SDL_RenderCopy(renderer, Head_Snake_B[0], NULL, &snakeRectB[i]);
-            if(directionB == DOWN) SDL_RenderCopy(renderer, Head_Snake_B[1], NULL, &snakeRectB[i]);
-            if(directionB == LEFT) SDL_RenderCopy(renderer, Head_Snake_B[2], NULL, &snakeRectB[i]);
-            if(directionB == RIGHT) SDL_RenderCopy(renderer, Head_Snake_B[3], NULL, &snakeRectB[i]);
+           drawHeadSnake(directionB, Head_Snake_B, snakeRectB);
         }
         else
         {
-            if(directionB == UP) SDL_RenderCopy(renderer, Tail_Snake_B[0], NULL, &snakeRectB[i]);
-            if(directionB == DOWN) SDL_RenderCopy(renderer, Tail_Snake_B[1], NULL, &snakeRectB[i]);
-            if(directionB == LEFT) SDL_RenderCopy(renderer, Tail_Snake_B[2], NULL, &snakeRectB[i]);
-            if(directionB == RIGHT) SDL_RenderCopy(renderer, Tail_Snake_B[3], NULL, &snakeRectB[i]);
+//            drawTailSnakeB();
+            drawTailSnake(SnakeB, displaySnakeLengthB, Tail_Snake_B, snakeRectB);
         }
     }
+}
 
-    //DRAW FOOD
+void drawFood()
+{
     foodRectA.x = foodA.x; foodRectA.y = foodA.y; foodRectA.h = foodA.height; foodRectA.w = foodA.width;
     SDL_RenderCopy(renderer, Food, NULL, &foodRectA);
     foodRectB.x = foodB.x; foodRectB.y = foodB.y; foodRectB.h = foodB.height; foodRectB.w = foodB.width;
     SDL_RenderCopy(renderer, Food, NULL, &foodRectB);
+}
 
-    //DRAW BOMB
+void drawBomb()
+{
     for(int i = 0; i < bombA_num; i++)
     {
         if(bombAStatus[i] == true)
@@ -237,8 +308,10 @@ void drawPlayScreen()
             SDL_RenderCopy(renderer, Bomb_B, NULL, &bombRectB[i]);
         }
     }
+}
 
-    //DRAW RESULT
+void drawResult()
+{
     if(gameOver == true)
     {
         if(Result == -1)
@@ -252,6 +325,17 @@ void drawPlayScreen()
             SDL_RenderCopy(renderer, Win, NULL, &ResultA);
         }
     }
+}
+
+void drawPlayScreen()
+{
+    SDL_RenderClear(renderer);
+    SDL_RenderCopy(renderer, PlayScreen, NULL, &Screen_rect);
+    loadScore();
+    drawSnake();
+    drawFood();
+    drawBomb();
+    drawResult();
     SDL_RenderPresent(renderer);
 }
 
@@ -272,8 +356,8 @@ void quitImage()
     SDL_DestroyTexture(Head_Snake_B[4]);
     SDL_DestroyTexture(Tail_Snake_A[4]);
     SDL_DestroyTexture(Tail_Snake_B[4]);
-    SDL_DestroyTexture(Body_Snake_A);
-    SDL_DestroyTexture(Body_Snake_B);
+    SDL_DestroyTexture(Body_Snake_A[5]);
+    SDL_DestroyTexture(Body_Snake_B[5]);
     SDL_DestroyTexture(Bomb_A);
     SDL_DestroyTexture(Bomb_B);
     SDL_DestroyTexture(Food);

@@ -1,6 +1,7 @@
 #ifndef RENDERIMAGE_H
 #define RENDERIMAGE_H
 
+extern const int UP, DOWN, LEFT, RIGHT;
 extern bool gameOver;
 extern int Result;
 extern TTF_Font* comic;
@@ -30,6 +31,10 @@ void drawStartButtonInHowToPlay();
 void drawHowToPlayButton();
 void drawButton();
 void drawOverButton();
+void drawSnake();
+void drawFood();
+void drawBomb();
+void drawResult();
 void drawPlayScreen();
 void quitImage();
 

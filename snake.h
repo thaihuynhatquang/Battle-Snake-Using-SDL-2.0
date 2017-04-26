@@ -9,6 +9,7 @@ struct positition
     const int width = size;
     const int height = size;
 };
+
 extern const int UP, DOWN, LEFT, RIGHT;
 extern int speed, bombA_num, bombB_num, scoreA, scoreB;
 extern int displaySnakeLengthA, realSnakeLengthA, displaySnakeLengthB, realSnakeLengthB;
