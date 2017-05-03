@@ -38,10 +38,10 @@
 		<Unit filename="main.cpp" />
 		<Unit filename="renderImage.cpp" />
 		<Unit filename="renderImage.h" />
+		<Unit filename="renderSnake.cpp" />
+		<Unit filename="renderSnake.h" />
 		<Unit filename="renderSound.cpp" />
 		<Unit filename="renderSound.h" />
-		<Unit filename="snake.cpp" />
-		<Unit filename="snake.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />

@@ -3,7 +3,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <sstream>
-#include "snake.h"
+#include "renderSnake.h"
 #include "renderImage.h"
 
 positition SnakeA[10000], SnakeB[10000], foodA, foodB, Direct[4];
@@ -12,14 +12,16 @@ SDL_Texture* Tail_Snake_A[4]; SDL_Texture* Tail_Snake_B[4];
 SDL_Texture* Body_Snake_A[5]; SDL_Texture* Body_Snake_B[5];
 SDL_Texture* Bomb_A; SDL_Texture* Bomb_B;
 SDL_Texture* Food;
-SDL_Texture* result_text;
-SDL_Texture* Background; SDL_Texture* StartScreen; SDL_Texture* PlayScreen; SDL_Texture* HowToPlayScreen;
+SDL_Texture* result_textA; SDL_Texture* result_textB;
+SDL_Texture* Background; SDL_Texture* StartScreen; SDL_Texture* PlayScreen; SDL_Texture* HowToPlayScreen; SDL_Texture* StartScreen2;
 SDL_Texture* Win; SDL_Texture* Lose;
 SDL_Texture* pauseButton;
 SDL_Texture* playButton;
 SDL_Texture* startButton;
 SDL_Texture* howToPlayButton;
 SDL_Texture* restartButton;
+SDL_Texture* muteButton;
+SDL_Texture* unmuteButton;
 SDL_Texture* exitButton;
 
 SDL_Rect snakeRectA[100]; SDL_Rect snakeRectB[100];
@@ -94,12 +96,14 @@ void loadScore()
     SDL_Surface* ScoreSurB = TTF_RenderText_Solid(comic, strB.c_str(), WHITE);
     SDL_Rect ScoreRectA = {1050, 300, 200, 350};
     SDL_Rect ScoreRectB = {75, 300, 200, 350};
-    result_text = SDL_CreateTextureFromSurface(renderer, ScoreSurA);
-    SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectA);
-    result_text = SDL_CreateTextureFromSurface(renderer, ScoreSurB);
-    SDL_RenderCopy(renderer, result_text, NULL, &ScoreRectB);
+    result_textA = SDL_CreateTextureFromSurface(renderer, ScoreSurA);
+    SDL_RenderCopy(renderer, result_textA, NULL, &ScoreRectA);
+    result_textB = SDL_CreateTextureFromSurface(renderer, ScoreSurB);
+    SDL_RenderCopy(renderer, result_textB, NULL, &ScoreRectB);
     SDL_FreeSurface(ScoreSurA);
     SDL_FreeSurface(ScoreSurB);
+    SDL_DestroyTexture(result_textA);
+    SDL_DestroyTexture(result_textB);
 }
 
 void loadBackground()
@@ -107,6 +111,7 @@ void loadBackground()
     PlayScreen = LoadTexture("Image/Background/PlayScreen.png");
     HowToPlayScreen = LoadTexture("Image/Background/HowToPlayScreen.png");
     StartScreen = LoadTexture("Image/Background/StartScreen.png");
+    StartScreen2 = LoadTexture("Image/Background/StartScreen2.png");
 }
 
 void loadResult()
@@ -123,12 +128,15 @@ void loadButton()
     howToPlayButton = LoadTexture("Image/Rectangle2.png");
     restartButton = LoadTexture("Image/Button/restart.png");
     exitButton = LoadTexture("Image/Button/exit.png");
+    muteButton = LoadTexture("Image/Button/mute.png");
+    unmuteButton = LoadTexture("Image/Button/unmute.png");
 }
 
 void drawStartScreen()
 {
     SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, StartScreen, NULL, &Screen_rect);
+    if(mute == false) SDL_RenderCopy(renderer, StartScreen, NULL, &Screen_rect);
+    else SDL_RenderCopy(renderer, StartScreen2, NULL, &Screen_rect);
     SDL_RenderPresent(renderer);
 }
 
@@ -136,6 +144,16 @@ void drawHowToPlayScreen()
 {
     SDL_RenderClear(renderer);
     SDL_RenderCopy(renderer, HowToPlayScreen, NULL, &Screen_rect);
+    SDL_RenderPresent(renderer);
+}
+
+void drawMuteButton()
+{
+    if(mute == false)
+    {
+        SDL_RenderCopy(renderer, muteButton, NULL, &muteButtonRect);
+    }
+    else SDL_RenderCopy(renderer, unmuteButton, NULL, &muteButtonRect);
     SDL_RenderPresent(renderer);
 }
 
@@ -278,7 +296,6 @@ void drawSnake()
         }
         else
         {
-//            drawTailSnakeB();
             drawTailSnake(SnakeB, displaySnakeLengthB, Tail_Snake_B, snakeRectB);
         }
     }
@@ -361,7 +378,6 @@ void quitImage()
     SDL_DestroyTexture(Bomb_A);
     SDL_DestroyTexture(Bomb_B);
     SDL_DestroyTexture(Food);
-    SDL_DestroyTexture(result_text);
     SDL_DestroyTexture(Background);
     SDL_DestroyTexture(StartScreen);
     SDL_DestroyTexture(PlayScreen);

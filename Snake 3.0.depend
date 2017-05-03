@@ -51,3 +51,53 @@
 	<SDL2/SDL_mixer.h>
 	"renderSound.h"
 
+1493803671 source:d:\ltnc\snake-battle-using-sdl-2.0-master\main.cpp
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<SDL2/SDL_mixer.h>
+	<SDL2/SDL.h>
+	<sstream>
+	<iostream>
+	<stdlib.h>
+	<ctime>
+	"renderSnake.h"
+	"renderSound.h"
+	"renderImage.h"
+
+1493223990 d:\ltnc\snake-battle-using-sdl-2.0-master\snake.h
+
+1493803630 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.h
+
+1493803540 d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.h
+
+1493803056 source:d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.cpp
+	<SDL2/SDL.h>
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<iostream>
+	<sstream>
+	"renderSnake.h"
+	"renderImage.h"
+
+1493223990 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.cpp
+	<iostream>
+	<SDL2/SDL.h>
+	<SDL2/SDL_mixer.h>
+	"renderSound.h"
+
+1493223990 source:d:\ltnc\snake-battle-using-sdl-2.0-master\snake.cpp
+	<iostream>
+	<SDL2/SDL.h>
+	<stdlib.h>
+	"snake.h"
+	"renderSound.h"
+
+1493633654 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.h
+
+1493633697 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.cpp
+	<iostream>
+	<SDL2/SDL.h>
+	<stdlib.h>
+	"renderSnake.h"
+	"renderSound.h"
+

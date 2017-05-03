@@ -6,19 +6,20 @@
 #include <iostream>
 #include <stdlib.h>
 #include <ctime>
-#include "snake.h"
+#include "renderSnake.h"
 #include "renderSound.h"
 #include "renderImage.h"
-
 
 const int UP = 0, DOWN = 2, LEFT = 3, RIGHT = 1;
 int speed = 45, bombA_num = 0, bombB_num = 0, size = 35, Result = 0;
 int preDirectionA = RIGHT, directionA = LEFT, preDirectionB = LEFT, directionB = RIGHT;
 bool bombAStatus[10000], bombBStatus[10000];
-bool running = true, pause = false, gameOver = false, start = false, restart = false, showHowToPlayScreen = false;
+bool running = true, pause = false, gameOver = false, start = false, restart = false, showHowToPlayScreen = false, mute = false;
+
 SDL_Rect Arena = {352, 29, 630, 630};
 SDL_Rect pauseButtonRect = {510, 662, 35, 35};
 SDL_Rect restartButtonRect = {650, 662, 35, 35};
+SDL_Rect muteButtonRect = {1170, 30, 110, 110};
 SDL_Rect exitButtonRect = {790, 662, 35, 35};
 SDL_Rect Rectangle = {522, 418, 300, 110};
 SDL_Rect Rectangle2 = {400, 545, 530, 110};
@@ -88,7 +89,10 @@ void waitEvent()
                     {
                         drawHowToPlayButton();
                     }
-                    else drawStartScreen();
+                    else
+                    {
+                        drawStartScreen();
+                    }
                 }
                 else if(start == false && showHowToPlayScreen == true)
                 {
@@ -117,6 +121,21 @@ void waitEvent()
                         playClickSound();
                         drawHowToPlayScreen();
                         showHowToPlayScreen = true;
+                    }
+                    else if((mouseClickX >= muteButtonRect.x) && (mouseClickX <= muteButtonRect.x + muteButtonRect.w) && (mouseClickY >= muteButtonRect.y) && (mouseClickY <= muteButtonRect.y + muteButtonRect.h))
+                    {
+                        playClickSound();
+                        if(mute == false)
+                        {
+                            mute = true;
+                            Mix_PauseMusic();
+                        }
+                        else
+                        {
+                            mute = false;
+                            Mix_ResumeMusic();
+                        }
+                        drawStartScreen();
                     }
                 }
                 else if(start == false && showHowToPlayScreen == true)
@@ -235,6 +254,7 @@ void playGame()
 void CreateGame()
 {
     drawStartScreen();
+    drawMuteButton();
     SnakeA[0].x = Arena.x; SnakeA[0].y = Arena.y;
     for(int i = 1; i < displaySnakeLengthA; i++)
     {
@@ -290,7 +310,7 @@ void Init()
 	windows = SDL_CreateWindow("Battle Snake", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1300, 700, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(windows, -1, SDL_RENDERER_ACCELERATED);
 
-	comic = TTF_OpenFont("Font/comic.ttf", 75);
+	comic = TTF_OpenFont("Font/comic.ttf", 175);
 	if (comic == NULL)
 	{
 		SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "ERRR", SDL_GetError(), windows);
