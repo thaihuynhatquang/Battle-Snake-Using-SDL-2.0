@@ -51,7 +51,7 @@
 	<SDL2/SDL_mixer.h>
 	"renderSound.h"
 
-1493803671 source:d:\ltnc\snake-battle-using-sdl-2.0-master\main.cpp
+1494346733 source:d:\ltnc\snake-battle-using-sdl-2.0-master\main.cpp
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
 	<SDL2/SDL_mixer.h>
@@ -63,14 +63,16 @@
 	"renderSnake.h"
 	"renderSound.h"
 	"renderImage.h"
+	"handleEvent.h"
+	"controlGame.h"
 
 1493223990 d:\ltnc\snake-battle-using-sdl-2.0-master\snake.h
 
-1493803630 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.h
+1493922436 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.h
 
-1493803540 d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.h
+1494343617 d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.h
 
-1493803056 source:d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.cpp
+1494343628 source:d:\ltnc\snake-battle-using-sdl-2.0-master\renderimage.cpp
 	<SDL2/SDL.h>
 	<SDL2/SDL_image.h>
 	<SDL2/SDL_ttf.h>
@@ -79,7 +81,7 @@
 	"renderSnake.h"
 	"renderImage.h"
 
-1493223990 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.cpp
+1493922436 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersound.cpp
 	<iostream>
 	<SDL2/SDL.h>
 	<SDL2/SDL_mixer.h>
@@ -92,12 +94,39 @@
 	"snake.h"
 	"renderSound.h"
 
-1493633654 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.h
+1493922436 d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.h
 
-1493633697 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.cpp
+1493922436 source:d:\ltnc\snake-battle-using-sdl-2.0-master\rendersnake.cpp
 	<iostream>
 	<SDL2/SDL.h>
 	<stdlib.h>
 	"renderSnake.h"
 	"renderSound.h"
+
+1494346476 d:\ltnc\snake-battle-using-sdl-2.0-master\handleevent.h
+
+1494346733 source:d:\ltnc\snake-battle-using-sdl-2.0-master\handleevent.cpp
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<SDL2/SDL_mixer.h>
+	<SDL2/SDL.h>
+	<iostream>
+	<stdlib.h>
+	"renderImage.h"
+	"renderSound.h"
+	"handleEvent.h"
+	"controlGame.h"
+
+1494346874 source:d:\ltnc\snake-battle-using-sdl-2.0-master\controlgame.cpp
+	<SDL2/SDL_image.h>
+	<SDL2/SDL_ttf.h>
+	<SDL2/SDL_mixer.h>
+	<SDL2/SDL.h>
+	<iostream>
+	<stdlib.h>
+	"renderImage.h"
+	"renderSound.h"
+	"renderSnake.h"
+
+1494346733 d:\ltnc\snake-battle-using-sdl-2.0-master\controlgame.h
 

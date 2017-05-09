@@ -35,6 +35,10 @@
 		<Linker>
 			<Add option="-lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer" />
 		</Linker>
+		<Unit filename="controlGame.cpp" />
+		<Unit filename="controlGame.h" />
+		<Unit filename="handleEvent.cpp" />
+		<Unit filename="handleEvent.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="renderImage.cpp" />
 		<Unit filename="renderImage.h" />
