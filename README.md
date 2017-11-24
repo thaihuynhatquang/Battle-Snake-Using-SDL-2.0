@@ -1,6 +1,8 @@
 # Battle-Snake-Using-SDL-2.0
 # Thái Huy Nhật Quang - MSSV: 16021113
 
+Link demo: https://youtu.be/hRnFd1Odt_c
+
 You need using Code::Block to built and run this project.
 
 Unzip file.zip:
